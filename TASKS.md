@@ -1,6 +1,6 @@
 # Tasks
 
-**Beta build:** this repo's `main` is currently on the same commit content as `ledger` main (both tip "Add password reset flow and retry failed writes when back online" — `4b19a11` here, `129d160` there; verified by diffing both `index.html` files). If friends report an old build, it's a GitHub Pages deploy/cache lag, not a stale repo — check that before re-promoting code.
+**Beta build:** `index.html` here was just re-promoted from `ledger`'s current sandbox build (icon/manifest, `live()`/`render()` split, `pushWrite` serialisation, password reset, retry-on-reconnect) — this branch, pending merge to `main`. If friends report an old build after this merges, it's a GitHub Pages deploy/cache lag, not a stale repo.
 
 Newest at top. Tags: `[kostas]` (needs Kostas), `[claude]` (Claude can do it).
 
@@ -24,11 +24,11 @@ Newest at top. Tags: `[kostas]` (needs Kostas), `[claude]` (Claude can do it).
 - [ ] [claude] Yearly heatmap view.
 - [ ] [claude] Day-of-week breakdown per entry.
 - [ ] [claude] `CLAUDE.md` documents `tools/make-icons.mjs` as the way to regenerate the four icon PNGs, but that script isn't present in this repo (or `ledger`) — either recreate it from the documented spec (512-unit grid, per-target `contentScale`, opaque PNGs) or fix the doc if it's meant to live elsewhere.
-- [ ] [claude] `index.html` here has CRLF line endings while `ledger/index.html` has LF (from an earlier "Add files via upload"). Harmless for the browser but makes cross-repo diffing noisy — normalize one to match the other.
 - [ ] [kostas] Confirm the Resend/`notify.socialhue.gr` SMTP config is set the same way in both the sandbox and beta Supabase projects (dashboard-only, not tracked in either repo — see `CLAUDE.md`).
 
 ## Done
 
+- [x] [claude] Promoted `ledger`'s current `index.html` into this repo, replacing what was here — also normalizes the CRLF/LF mismatch (this file now matches `ledger`'s LF line endings) since the copy carried it over. Confirmed first that `ENV_NAME` detection is hostname-based, not repo-based (`costgal.github.io` + `/ledger/` path → sandbox, anything else → beta), so this correctly still resolves to `beta` once deployed from the beta host.
 - [x] [claude] Verified this list against the actual code before seeding it (see corrections below) and reviewed/corrected `CLAUDE.md` — documented that beta lives in a separate repo (this one) kept in sync by hand with `ledger`, and added the Resend/`notify.socialhue.gr` auth-email SMTP setup.
 - [x] [claude] Password reset, receiving side — **this was listed as "in progress" but is already fully built**: `recoveryFromHash()` detects a Supabase recovery token in the URL hash, `boot()` routes to `renderResetPassword()` instead of normal login when one's present, and the new password is submitted via `authPut('user', …)` using that recovery token. `sendReset()` already builds its `redirect_to` from `location.origin + location.pathname`, so it's per-environment automatically — never hardcoded. Only the query-string edge case above is genuinely open.
 - [x] [claude]/[kostas] "Promote current sandbox code to `ledger-beta`" — **this was listed as queued, but it's already done**: both repos' `index.html` are byte-identical content (aside from CRLF/LF) and both are on the same latest commit. See the beta-build note at the top.
