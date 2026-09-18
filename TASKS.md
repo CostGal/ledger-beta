@@ -1,6 +1,6 @@
 # Tasks
 
-**Beta build:** this repo's `index.html` was just promoted from `ledger`'s `main` (per-entry notes, undo for mis-taps, data export, plus the earlier password reset / icon / emoji-icon / unsaved-write-badge baseline) — on this branch, pending merge to `main`. Once merged, both repos are back in sync.
+**Beta build:** this repo's `index.html` was just promoted from `ledger`'s `main` (the new Review tab, on top of per-entry notes, undo, data export, and the earlier baseline) — on this branch, pending merge to `main`. Once merged, both repos are back in sync.
 
 **GitHub issues:** every In progress / Queued item below is mirrored as an issue in `CostGal/ledger` (the canonical repo — issues aren't duplicated into this repo separately), tagged `[kostas]` or `[claude]` in its title to match. Issue number is noted in parens after each item. When ticking an item here, close the matching issue in the same pass (and vice versa) — this list and the issue tracker are meant to stay in sync, not duplicate independently.
 
@@ -16,7 +16,6 @@ Newest at top. Tags: `[kostas]` (needs Kostas), `[claude]` (Claude can do it).
 - [ ] [kostas] Run the Resend→Supabase integration on `ledger-beta`; confirm SMTP settings are populated in that project's dashboard the same way as sandbox's. (ledger#8)
 - [ ] [kostas] Save the weekly CSV export query in both Supabase projects. (ledger#9)
 - [ ] [kostas] Supabase webhook on new signup → Make → notification. (ledger#10)
-- [ ] [claude] Week review screen: ceilings crossed vs. floors missed, patterns across weeks. Present as observations, never as causal claims. (The current Week view is single-week status only — `renderWeekView` has no cross-week comparison yet.) (ledger#14)
 - [ ] [claude] Yearly heatmap view. (ledger#15)
 - [ ] [claude] Day-of-week breakdown per entry. (ledger#16)
 - [ ] [claude] `CLAUDE.md` documents `tools/make-icons.mjs` as the way to regenerate the four icon PNGs, but that script isn't present in this repo (or `ledger-beta`) — either recreate it from the documented spec (512-unit grid, per-target `contentScale`, opaque PNGs) or fix the doc if it's meant to live elsewhere. (ledger#17)
@@ -24,6 +23,7 @@ Newest at top. Tags: `[kostas]` (needs Kostas), `[claude]` (Claude can do it).
 
 ## Done
 
+- [x] [claude] Week review screen: new "Review" tab, 4-week-at-a-time — one row per weekly entry with a heat strip (reusing Month view's accent/red convention) and a plain-stated count ("Met 3 of 4 weeks", "Over budget 2 of 4 weeks"), paginated. Design agreed with Kostas first: shape (heatmap + basic observations), window (last 4 weeks, rollback), placement (new tab), tone (direct but discreet — counts only, no advice, no causal claims). Verified with two mocked Playwright previews (data accuracy and pagination). (ledger#14, closed)
 - [x] [claude] Per-user data export: a "Download my data" button in Manage view exports everything the account owns (entry types, logs with notes, reflections) as one JSON file, mirroring the existing importer's slug-based shape. Read-only, no schema change. Verified with a mocked Playwright preview, including inspecting the actual downloaded file contents. Merged via PR ledger#23. (ledger#13, closed)
 - [x] [claude] Undo for mis-taps: a tap on a counter chip (+1 or minus) or a binary toggle shows a neutral undo toast (a new `#undo` element, deliberately not the red-styled `#toast` used for errors) with an Undo button that reverts just that tap. Only the most recent tap is undoable. Previewed with a mocked screenshot before pushing (confirmed both counter and toggle revert correctly). Merged via PR ledger#21. (ledger#12, closed)
 - [x] [claude] Per-entry notes on a log: a pencil button on each chip/toggle opens a free-text note for that entry on the viewed date, in a section below the chips (not inline in the flex-wrap row). Pencil turns accent-colored once a note exists. New `S.logNotes` cache alongside `S.logs` — `cnt()`/`sumRange()`/`periodTot()` untouched. New nullable `note` column on `logs` in both Supabase projects. Previewed with a mocked screenshot before pushing. Merged via PR ledger#20. (ledger#11, closed)
